@@ -36,3 +36,10 @@ override.tf.json
 .terraformrc
 terraform.rc
 /.terraform.lock.hcl
+/modules/lambda/context.tf
+/modules/lambda/src/update_course/update_course.zip
+/modules/lambda/src/save_course/save_course.zip
+/modules/lambda/src/get_course/get_course.zip
+/modules/lambda/src/get_all_courses/get_all_courses.zip
+/modules/lambda/src/get_all_authors/get_all_authors.zip
+/modules/lambda/src/delete_course/delete_course.zip
