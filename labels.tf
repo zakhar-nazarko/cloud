@@ -6,7 +6,7 @@ module "label" {
   stage       = var.stage
   environment = var.environment
   label_order = var.label_order
-  delimiter = "-"
+  delimiter   = "-"
 
 }
 
