@@ -1,12 +1,7 @@
-provider "aws" {
-  region = "eu-central-1"
-}
-
-
 resource "aws_s3_bucket" "tf_state" {
-  bucket        = "lpnu-zakhar-backend"
+  bucket        = module.backend_labels.id
   force_destroy = true
-
+  tags          = module.backend_labels.tags
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "tf_state_encryption" {
@@ -19,13 +14,15 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "tf_state_encrypti
   }
 }
 
-
 resource "aws_dynamodb_table" "tf_locks" {
-  name         = "lpnu-zakhar-backend"
+  name         = module.backend_labels.id
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
+
   attribute {
     name = "LockID"
     type = "S"
   }
+
+  tags = module.backend_labels.tags
 }
