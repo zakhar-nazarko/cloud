@@ -6,7 +6,6 @@ module "table_authors" {
 
 module "lambda" {
   source                = "./modules/lambda"
-  context               = module.label.context
   lambda_exec_role_arn = module.iam.lambda_exec_role_arn
 }
 

@@ -43,3 +43,4 @@ terraform.rc
 /modules/lambda/src/get_all_courses/get_all_courses.zip
 /modules/lambda/src/get_all_authors/get_all_authors.zip
 /modules/lambda/src/delete_course/delete_course.zip
+/modules/lambda/src/.venv/
