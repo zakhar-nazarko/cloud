@@ -2,35 +2,37 @@ import json
 import boto3
 import os
 
-# Initialize DynamoDB client
 dynamodb = boto3.client("dynamodb", region_name=os.environ.get("AWS_REGION", "eu-central-1"))
 
 def lambda_handler(event, context):
+    headers = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "GET,OPTIONS"
+    }
+
     try:
-        course_id = event.get("id")
+        course_id = event.get("pathParameters", {}).get("id")
         if not course_id:
             return {
                 "statusCode": 400,
-                "body": json.dumps({"error": "Missing 'id' in request"})
+                "headers": headers,
+                "body": json.dumps({"error": "Missing 'id' in path parameters"})
             }
 
-        params = {
-            "TableName": "courses",
-            "Key": {
-                "id": {"S": course_id}
-            }
-        }
-
-        response = dynamodb.get_item(**params)
+        response = dynamodb.get_item(
+            TableName="courses",
+            Key={"id": {"S": course_id}}
+        )
 
         item = response.get("Item")
         if not item:
             return {
                 "statusCode": 404,
+                "headers": headers,
                 "body": json.dumps({"error": "Course not found"})
             }
 
-        # Construct course object from DynamoDB item
         course = {
             "id": item["id"]["S"],
             "title": item["title"]["S"],
@@ -42,11 +44,13 @@ def lambda_handler(event, context):
 
         return {
             "statusCode": 200,
+            "headers": headers,
             "body": json.dumps(course)
         }
 
     except Exception as e:
         return {
             "statusCode": 500,
+            "headers": headers,
             "body": json.dumps({"error": str(e)})
         }

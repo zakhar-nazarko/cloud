@@ -3,45 +3,53 @@ import boto3
 import os
 import re
 
-# Initialize DynamoDB client
 dynamodb = boto3.client("dynamodb", region_name=os.environ.get("AWS_REGION", "us-east-1"))
-
 
 def replace_all(text, find, replace):
     return re.sub(find, replace, text)
 
-
 def lambda_handler(event, context):
-    try:
-        # Create hyphenated, lowercase ID from title
-        course_id = replace_all(event["title"], r"\s+", "-").lower()
+    headers = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "POST,OPTIONS"
+    }
 
-        # Construct item
+    try:
+        body = json.loads(event.get("body", "{}"))
+
+        required_fields = ["title", "authorId", "length", "category"]
+        for field in required_fields:
+            if field not in body:
+                return {
+                    "statusCode": 400,
+                    "headers": headers,
+                    "body": json.dumps({"error": f"Missing required field: {field}"})
+                }
+
+        course_id = replace_all(body["title"], r"\s+", "-").lower()
+
         item = {
             "id": {"S": course_id},
-            "title": {"S": event["title"]},
+            "title": {"S": body["title"]},
             "watchHref": {"S": f"http://www.pluralsight.com/courses/{course_id}"},
-            "authorId": {"S": event["authorId"]},
-            "length": {"S": event["length"]},
-            "category": {"S": event["category"]}
+            "authorId": {"S": body["authorId"]},
+            "length": {"S": body["length"]},
+            "category": {"S": body["category"]}
         }
 
-        # Save item to DynamoDB
-        dynamodb.put_item(
-            TableName="courses",
-            Item=item
-        )
+        dynamodb.put_item(TableName="courses", Item=item)
 
-        # Return saved item
         return {
             "statusCode": 200,
+            "headers": headers,
             "body": json.dumps({
                 "id": course_id,
-                "title": event["title"],
+                "title": body["title"],
                 "watchHref": f"http://www.pluralsight.com/courses/{course_id}",
-                "authorId": event["authorId"],
-                "length": event["length"],
-                "category": event["category"]
+                "authorId": body["authorId"],
+                "length": body["length"],
+                "category": body["category"]
             })
         }
 
@@ -49,5 +57,6 @@ def lambda_handler(event, context):
         print("Error saving course:", e)
         return {
             "statusCode": 500,
+            "headers": headers,
             "body": json.dumps({"error": str(e)})
         }
