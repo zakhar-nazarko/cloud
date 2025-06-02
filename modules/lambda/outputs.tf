@@ -58,3 +58,8 @@ output "get_course_by_id_invoke_arn" {
 output "delete_course_by_id_invoke_arn" {
   value = aws_lambda_function.delete_course.invoke_arn
 }
+
+output "lambda_function_names" {
+  value = [aws_lambda_function.delete_course.function_name, aws_lambda_function.get_course.function_name, aws_lambda_function.update_course.function_name,
+  aws_lambda_function.save_course.function_name, aws_lambda_function.get_all_courses.function_name, aws_lambda_function.get_all_authors.function_name]
+}
