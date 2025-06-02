@@ -30,3 +30,9 @@ module "gateaway" {
 module "front" {
   source = "./modules/front"
 }
+
+module "alerts" {
+  source = "./modules/alarms-metrics"
+
+  lambda_functions = module.lambda.lambda_function_names
+}
