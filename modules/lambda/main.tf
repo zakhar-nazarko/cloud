@@ -41,11 +41,11 @@ module "label_delete_course" {
 }
 
 resource "aws_lambda_function" "get_all_authors" {
-  function_name = module.label_get_all_authors.id
-  role          = var.lambda_exec_role_arn
-  runtime       = "python3.12"
-  handler       = "get_all_authors.lambda_handler"
-  filename      = data.archive_file.get_all_authors.output_path
+  function_name    = module.label_get_all_authors.id
+  role             = var.lambda_exec_role_arn
+  runtime          = "python3.12"
+  handler          = "get_all_authors.lambda_handler"
+  filename         = data.archive_file.get_all_authors.output_path
   source_code_hash = data.archive_file.get_all_authors.output_base64sha256
 }
 
@@ -56,11 +56,11 @@ data "archive_file" "get_all_authors" {
 }
 
 resource "aws_lambda_function" "get_all_courses" {
-  function_name = module.label_get_all_courses.id
-  role          = var.lambda_exec_role_arn
-  runtime       = "python3.12"
-  handler       = "get_all_courses.lambda_handler"
-  filename      = data.archive_file.get_all_courses.output_path
+  function_name    = module.label_get_all_courses.id
+  role             = var.lambda_exec_role_arn
+  runtime          = "python3.12"
+  handler          = "get_all_courses.lambda_handler"
+  filename         = data.archive_file.get_all_courses.output_path
   source_code_hash = data.archive_file.get_all_courses.output_base64sha256
 }
 
@@ -71,11 +71,11 @@ data "archive_file" "get_all_courses" {
 }
 
 resource "aws_lambda_function" "get_course" {
-  function_name = module.label_get_course.id
-  role          = var.lambda_exec_role_arn
-  runtime       = "python3.12"
-  handler       = "get_course.lambda_handler"
-  filename      = data.archive_file.get_course.output_path
+  function_name    = module.label_get_course.id
+  role             = var.lambda_exec_role_arn
+  runtime          = "python3.12"
+  handler          = "get_course.lambda_handler"
+  filename         = data.archive_file.get_course.output_path
   source_code_hash = data.archive_file.get_course.output_base64sha256
 }
 
@@ -86,11 +86,11 @@ data "archive_file" "get_course" {
 }
 
 resource "aws_lambda_function" "save_course" {
-  function_name = module.label_save_course.id
-  role          = var.lambda_exec_role_arn
-  runtime       = "python3.12"
-  handler       = "save_course.lambda_handler"
-  filename      = data.archive_file.save_course.output_path
+  function_name    = module.label_save_course.id
+  role             = var.lambda_exec_role_arn
+  runtime          = "python3.12"
+  handler          = "save_course.lambda_handler"
+  filename         = data.archive_file.save_course.output_path
   source_code_hash = data.archive_file.save_course.output_base64sha256
 }
 
@@ -101,11 +101,11 @@ data "archive_file" "save_course" {
 }
 
 resource "aws_lambda_function" "update_course" {
-  function_name = module.label_update_course.id
-  role          = var.lambda_exec_role_arn
-  runtime       = "python3.12"
-  handler       = "update_course.lambda_handler"
-  filename      = data.archive_file.update_course.output_path
+  function_name    = module.label_update_course.id
+  role             = var.lambda_exec_role_arn
+  runtime          = "python3.12"
+  handler          = "update_course.lambda_handler"
+  filename         = data.archive_file.update_course.output_path
   source_code_hash = data.archive_file.update_course.output_base64sha256
 }
 
@@ -116,11 +116,11 @@ data "archive_file" "update_course" {
 }
 
 resource "aws_lambda_function" "delete_course" {
-  function_name = module.label_delete_course.id
-  role          = var.lambda_exec_role_arn
-  runtime       = "python3.12"
-  handler       = "delete_course.lambda_handler"
-  filename      = data.archive_file.delete_course.output_path
+  function_name    = module.label_delete_course.id
+  role             = var.lambda_exec_role_arn
+  runtime          = "python3.12"
+  handler          = "delete_course.lambda_handler"
+  filename         = data.archive_file.delete_course.output_path
   source_code_hash = data.archive_file.delete_course.output_base64sha256
 }
 

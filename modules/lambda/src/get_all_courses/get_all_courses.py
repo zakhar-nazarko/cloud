@@ -2,16 +2,11 @@ import json
 import boto3
 import os
 
-# Initialize DynamoDB client
 dynamodb = boto3.client("dynamodb", region_name=os.environ.get("AWS_REGION", "eu-central-1"))
 
 def lambda_handler(event, context):
     try:
-        params = {
-            "TableName": "courses"
-        }
-
-        response = dynamodb.scan(**params)
+        response = dynamodb.scan(TableName="courses")
         items = response.get("Items", [])
 
         courses = []
@@ -28,11 +23,21 @@ def lambda_handler(event, context):
 
         return {
             "statusCode": 200,
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "GET,OPTIONS"
+            },
             "body": json.dumps(courses)
         }
 
     except Exception as e:
         return {
             "statusCode": 500,
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "GET,OPTIONS"
+            },
             "body": json.dumps({"error": str(e)})
         }

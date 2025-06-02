@@ -2,42 +2,50 @@ import json
 import boto3
 import os
 
-# Initialize DynamoDB client
 dynamodb = boto3.client("dynamodb", region_name=os.environ.get("AWS_REGION", "us-east-1"))
 
 def lambda_handler(event, context):
     try:
-        # Construct item from event
+        body = json.loads(event["body"]) if "body" in event else event
+
         item = {
-            "id": {"S": event["id"]},
-            "title": {"S": event["title"]},
-            "watchHref": {"S": event["watchHref"]},
-            "authorId": {"S": event["authorId"]},
-            "length": {"S": event["length"]},
-            "category": {"S": event["category"]}
+            "id": {"S": body["id"]},
+            "title": {"S": body["title"]},
+            "watchHref": {"S": body["watchHref"]},
+            "authorId": {"S": body["authorId"]},
+            "length": {"S": body["length"]},
+            "category": {"S": body["category"]}
         }
 
-        # Put item into DynamoDB table
         dynamodb.put_item(
             TableName="courses",
             Item=item
         )
 
-        # Return the saved item as response
         return {
             "statusCode": 200,
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "OPTIONS,PUT"
+            },
             "body": json.dumps({
-                "id": event["id"],
-                "title": event["title"],
-                "watchHref": event["watchHref"],
-                "authorId": event["authorId"],
-                "length": event["length"],
-                "category": event["category"]
+                "id": body["id"],
+                "title": body["title"],
+                "watchHref": body["watchHref"],
+                "authorId": body["authorId"],
+                "length": body["length"],
+                "category": body["category"]
             })
         }
 
     except Exception as e:
         return {
             "statusCode": 500,
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Headers": "Content-Type",
+                "Access-Control-Allow-Methods": "OPTIONS,PUT"
+            },
             "body": json.dumps({"error": str(e)})
         }
